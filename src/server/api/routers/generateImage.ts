@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { openAI } from "~/functions/openAi";
 import { generatePrompt } from "~/functions/formatPrompt";
+import { uploadFileToS3 } from "~/functions/aws";
 
 interface ReturnTypes {
   success: boolean;
@@ -38,8 +39,6 @@ export const generateImages = createTRPCRouter({
 
       const { credits } = getUserIdResult;
 
-      console.log("here");
-
       if (credits < 1) {
         return (returnValue.message = "Not enough credits.");
       }
@@ -54,33 +53,40 @@ export const generateImages = createTRPCRouter({
         );
         // Generate image using open AI API
         const { data } = await openAI(formattedPrompt);
-        console.log(data);
+        const b64ImageReponse = data.data[0]?.b64_json;
         // Upload image to S3
-        // await uploadFileToS3(data[0]?.b64_json);
+        if (!b64ImageReponse) {
+          return (returnValue.message = "Failed to Generate Image.");
+        }
+        const { Location } = await uploadFileToS3(b64ImageReponse);
+
+        if (!Location) {
+          return (returnValue.message = "Failed to Save Image.");
+        }
+
+        await ctx.prisma.user.update({
+          where: {
+            id: input.userId,
+          },
+          data: {
+            credits: credits - 1,
+          },
+        });
+
+        await ctx.prisma.images.create({
+          data: {
+            url: Location,
+            userId: input.userId,
+            prompt: input.prompt,
+          },
+        });
+
+        return (
+          (returnValue.success = true),
+          (returnValue.message = "Image generated.")
+        );
       } catch (error) {
-        console.log(error);
         return (returnValue.message = "Something went wrong.");
       }
-
-      await ctx.prisma.user.update({
-        where: {
-          id: input.userId,
-        },
-        data: {
-          credits: credits - 1,
-        },
-      });
-
-      await ctx.prisma.images.create({
-        data: {
-          url: "https://i.imgur.com/2Yj2Q2U.png",
-          userId: input.userId,
-          prompt: input.prompt,
-        },
-      });
-
-      return (
-        (returnValue.success = true), (returnValue.message = "Image generated.")
-      );
     }),
 });

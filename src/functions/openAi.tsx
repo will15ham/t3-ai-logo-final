@@ -10,6 +10,7 @@ export async function openAI(prompt: string) {
     prompt: prompt,
     n: 1,
     size: "512x512",
+    response_format: "b64_json",
   });
 
   return response;
