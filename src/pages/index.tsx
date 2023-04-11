@@ -7,17 +7,9 @@ import { api } from "~/utils/api";
 import { StorageClassAnalysisSchemaVersion } from "@aws-sdk/client-s3";
 import toast, { Toaster } from "react-hot-toast";
 import Nav from "~/components/Nav";
-
-// async sleep function
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import Hero from "~/components/Hero";
 
 const Home: NextPage = () => {
-  const notify = () =>
-    toast.promise(sleep(1000), {
-      loading: "Generating Logo...",
-      success: <b>Logo Generated!</b>,
-      error: <b>Failed to Generate Logo.</b>,
-    });
   return (
     <>
       <Head>
@@ -27,9 +19,8 @@ const Home: NextPage = () => {
       </Head>
       <main className="">
         <div>
-          <button onClick={notify}>Make me a toast</button>
-          <Toaster />
           <Nav />
+          <Hero />
         </div>
       </main>
     </>
@@ -41,10 +32,7 @@ export default Home;
 // const AuthShowcase: React.FC = () => {
 //   const { data: sessionData } = useSession();
 
-//   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-//     undefined, // no input
-//     { enabled: sessionData?.user !== undefined }
-//   );
+//   const secretMessage = "";
 
 //   return (
 //     <div className="flex flex-col items-center justify-center gap-4">
