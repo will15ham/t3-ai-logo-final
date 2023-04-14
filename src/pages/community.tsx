@@ -21,7 +21,7 @@ const community: NextPage = () => {
 
   return (
     <>
-      <Nav />
+      {/* <Nav /> */}
       <div className="container mx-auto py-20">
         <h2>Community:</h2>
         <p>

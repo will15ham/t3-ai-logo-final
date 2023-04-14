@@ -19,7 +19,6 @@ const Home: NextPage = () => {
       </Head>
       <main className="">
         <div>
-          <Nav />
           <Hero />
         </div>
       </main>

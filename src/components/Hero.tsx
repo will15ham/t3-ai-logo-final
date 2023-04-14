@@ -4,8 +4,8 @@ import Link from "next/link";
 
 const Hero = () => {
   return (
-    <main className="flex h-screen flex-col items-center justify-center gap-y-6">
-      <section className="flex gap-8">
+    <main className="flex h-screen w-full flex-col items-center justify-center gap-y-6">
+      <section className="flex gap-8 overflow-hidden">
         <Image
           className="rounded-lg"
           src="/img-2PxqLAEeBGeVhYmSSdppeMQA.png"
