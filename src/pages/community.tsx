@@ -12,7 +12,7 @@ const community: NextPage = () => {
 
   return (
     <>
-      <section className=" mx-auto py-20">
+      <section className="mx-auto py-20">
         <h2 className="px-4 text-2xl">Community:</h2>
         <p className="px-4 py-2">
           Here are the 50 most recent generated designs from the community! To

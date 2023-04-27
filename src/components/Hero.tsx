@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Hero: React.FC = () => {
   return (
-    <main className="flex h-screen w-full flex-col  items-center gap-y-8 py-40">
+    <main className="flex h-screen w-full flex-col items-center gap-y-8 py-40">
       <section className="flex gap-4 overflow-hidden sm:gap-8">
         <Image
           className="hidden rounded-lg md:block"

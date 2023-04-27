@@ -21,7 +21,7 @@ export const generateImages = createTRPCRouter({
         shape: z.string(),
       })
     )
-    .query(async ({ input, ctx }) => {
+    .mutation(async ({ input, ctx }) => {
       const getUserIdResult = await ctx.prisma.user.findUnique({
         where: {
           id: input.userId,
@@ -86,6 +86,7 @@ export const generateImages = createTRPCRouter({
           (returnValue.message = "Image generated.")
         );
       } catch (error) {
+        console.log(error);
         return (returnValue.message = "Something went wrong.");
       }
     }),

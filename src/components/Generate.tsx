@@ -1,33 +1,227 @@
 import React, { useState } from "react";
+import { api } from "~/utils/api";
+import { useSession } from "next-auth/react";
+import Loading from "./LoadingSpinner";
 
-type ColorOption = {
-  label: string;
-  value: string;
-};
+interface FormValues {
+  textInput: string;
+  colorInput: string;
+  shapeInput: string;
+  styleInput: string;
+  typeInput: string;
+}
 
-const colorOptions: ColorOption[] = [
-  { label: "Red", value: "#ff0000" },
-  { label: "Green", value: "#00ff00" },
-  { label: "Blue", value: "#0000ff" },
-  { label: "Yellow", value: "#ffff00" },
+const colorOptions = [
+  { name: "red", color: "bg-red-500" },
+  { name: "green", color: "bg-green-500" },
+  { name: "blue", color: "bg-blue-500" },
+  { name: "yellow", color: "bg-yellow-500" },
+  { name: "orange", color: "bg-orange-500" },
+  { name: "purple", color: "bg-purple-500" },
+  { name: "pink", color: "bg-pink-500" },
+  { name: "teal", color: "bg-teal-500" },
 ];
 
-const ColorSelector: React.FC = () => {
-  const [selectedColor, setSelectedColor] = useState<ColorOption>(
-    colorOptions[0]
-  );
+const styles = [
+  "Minimalist",
+  "Metallic",
+  "Polygon",
+  "Pixelated",
+  "Clay",
+  "Gradient",
+  "Flat",
+  "Illustrated",
+  "Realism",
+];
 
-  const handleColorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
-    const selectedOption = colorOptions.find(
-      (option) => option.value === selectedValue
-    );
-    if (selectedOption) {
-      setSelectedColor(selectedOption);
-    }
+const shapes = ["Circular", "Rounded", "Square"];
+
+const types = ["Regular", "Professionalism"];
+
+const GenerateForm: React.FC = () => {
+  const { data: sessionData } = useSession();
+
+  const [formValues, setFormValues] = useState<FormValues>({
+    textInput: "",
+    colorInput: "",
+    shapeInput: "",
+    styleInput: "",
+    typeInput: "",
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
   };
 
-  return <form></form>;
+  interface input {
+    style: string;
+    userId: string;
+    prompt: string;
+    type: string;
+    shape: string;
+    color: string;
+  }
+  const mutate = api.generateImages.generateImage.useMutation({});
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Submitted form values:", formValues);
+    const input: input = {
+      style: formValues.styleInput,
+      userId: sessionData?.user.id || "",
+      prompt: formValues.textInput,
+      type: formValues.typeInput,
+      shape: formValues.shapeInput,
+      color: formValues.colorInput,
+    };
+    mutate.mutate(input);
+  };
+
+  return (
+    <>
+      <h2 className="px-4 text-2xl">Generate:</h2>
+      <p className="px-4 py-2">
+        Complete the form below to generate yourself an icon. Each icon
+        generated cost 1 credit! <br></br>{" "}
+        <span className="font-bold">
+          {sessionData
+            ? `You currently have ${sessionData.user?.credits.toString()} credits remaining.`
+            : ""}
+        </span>{" "}
+      </p>
+      <section className="mx-4 flex flex-wrap justify-center rounded-md border border-slate-700 bg-slate-500 bg-opacity-25 p-4">
+        <form onSubmit={handleSubmit} className="mx-auto max-w-md py-20">
+          <div className="mb-4">
+            <label htmlFor="textInput" className="mb-2 block font-medium">
+              Describe your icon using a noun and adjective
+            </label>
+            <input
+              type="text"
+              id="textInput"
+              name="textInput"
+              value={formValues.textInput}
+              onChange={handleInputChange}
+              className="w-full rounded-md border-gray-300 p-2 text-black shadow-sm"
+              placeholder="e.g. 'a happy dog'"
+            />
+          </div>
+          <div className="mb-4">
+            <p className="mb-2 block font-medium">Select a color:</p>
+            {colorOptions.map((color) => (
+              <label
+                key={color.name}
+                className={`mb-2 mr-4 inline-flex items-center ${
+                  color.color
+                } h-24 w-24 scale-110 cursor-pointer rounded-3xl ${
+                  formValues.colorInput === color.name
+                    ? "ring-2 ring-white"
+                    : "bg-opacity-50"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="colorInput"
+                  value={color.name}
+                  checked={formValues.colorInput === color.name}
+                  onChange={handleInputChange}
+                  className="hidden"
+                />
+                <span className="sr-only">{color.name}</span>
+              </label>
+            ))}
+          </div>
+          <div className="mb-4">
+            <p className="mb-2 block font-medium">Select a shape:</p>
+            {shapes.map((shape) => (
+              <label
+                key={shape}
+                className={`mb-2 mr-4 inline-flex h-24 w-24 scale-110 cursor-pointer items-center rounded-3xl bg-purple-500 ${
+                  formValues.shapeInput === shape
+                    ? "ring-2 ring-white"
+                    : "bg-opacity-50"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="shapeInput"
+                  value={shape}
+                  checked={formValues.shapeInput === shape}
+                  onChange={handleInputChange}
+                  className="hidden"
+                />
+                <span className="sr-only">{shape}</span>
+              </label>
+            ))}
+          </div>
+          <div className="mb-4">
+            <p className="mb-2 block font-medium">Select a style:</p>
+            {styles.map((style) => (
+              <label
+                key={style}
+                className={`mb-2 mr-4 inline-flex h-24 w-24 scale-110 cursor-pointer items-center rounded-3xl bg-purple-500 ${
+                  formValues.styleInput === style
+                    ? "ring-2 ring-white"
+                    : "bg-opacity-50"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="styleInput"
+                  value={style}
+                  checked={formValues.styleInput === style}
+                  onChange={handleInputChange}
+                  className="hidden"
+                />
+                <span className="sr-only">{style}</span>
+              </label>
+            ))}
+          </div>
+          <div className="mb-4">
+            <p className="mb-2 block font-medium">Select a type:</p>
+            {types.map((type) => (
+              <label
+                key={type}
+                className={`mb-2 mr-4 inline-flex h-24 w-24 scale-110 cursor-pointer items-center rounded-3xl bg-purple-500 ${
+                  formValues.typeInput === type
+                    ? "ring-2 ring-white"
+                    : "bg-opacity-50"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="typeInput"
+                  value={type}
+                  checked={formValues.typeInput === type}
+                  onChange={handleInputChange}
+                  className="hidden"
+                />
+                <span className="sr-only">{type}</span>
+              </label>
+            ))}
+          </div>
+          <button
+            type="submit"
+            className={
+              sessionData
+                ? "rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                : "pointer-events-none cursor-not-allowed rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            }
+          >
+            {sessionData
+              ? sessionData.user.credits > 1
+                ? `Generate!`
+                : "Not enough credits"
+              : "Sign in to generate"}{" "}
+            {mutate.isLoading ? <Loading /> : ""}
+          </button>
+        </form>
+      </section>
+    </>
+  );
 };
 
-export default ColorSelector;
+export default GenerateForm;

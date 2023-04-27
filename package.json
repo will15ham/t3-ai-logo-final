@@ -19,6 +19,7 @@
     "@trpc/react-query": "^10.18.0",
     "@trpc/server": "^10.18.0",
     "aws-sdk": "^2.1352.0",
+    "formik": "^2.2.9",
     "next": "^13.2.4",
     "next-auth": "4.20.1",
     "openai": "^3.2.1",

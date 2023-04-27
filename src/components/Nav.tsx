@@ -37,11 +37,11 @@ const Nav: React.FC = () => {
               : "w-full items-center justify-between md:flex md:w-auto md:justify-center"
           }
         >
-          <ul className="mt-4 flex flex-col rounded-lg border border-gray-700 bg-gray-800 p-4 font-medium hover:text-blue-700 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-gray-900 md:p-0">
+          <ul className="mt-4 flex flex-col rounded-lg border border-gray-700 bg-gray-800 p-4 font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-gray-900 md:p-0">
             <li>
               <Link
                 href="/"
-                className="block rounded py-2 pl-3 pr-4 text-white hover:bg-gray-600 md:bg-transparent md:p-0"
+                className="text-whitemd:bg-transparent block rounded py-2 pl-3 pr-4 md:p-0"
                 onClick={() => setNav(false)}
               >
                 Home
@@ -50,7 +50,7 @@ const Nav: React.FC = () => {
             <li>
               <Link
                 href="/generate"
-                className="block rounded py-2 pl-3 pr-4 text-white hover:bg-gray-600 md:bg-transparent md:p-0"
+                className="block rounded py-2 pl-3 pr-4 text-white md:bg-transparent md:p-0"
                 onClick={() => setNav(false)}
               >
                 Generate
@@ -59,24 +59,15 @@ const Nav: React.FC = () => {
             <li>
               <Link
                 href="/community"
-                className="block rounded py-2 pl-3 pr-4 text-white hover:bg-gray-600 md:bg-transparent md:p-0"
+                className="block rounded py-2 pl-3 pr-4 text-white md:bg-transparent md:p-0"
                 onClick={() => setNav(false)}
               >
                 Community
               </Link>
             </li>
             <li>
-              <Link
-                href="/history"
-                className="block rounded py-2 pl-3 pr-4 text-white hover:bg-gray-600 md:bg-transparent md:p-0"
-                onClick={() => setNav(false)}
-              >
-                History
-              </Link>
-            </li>
-            <li>
               <button
-                className="block rounded py-2 pl-3 pr-4 text-white hover:bg-gray-600 md:bg-transparent md:p-0"
+                className="block rounded py-2 pl-3 pr-4 text-white md:bg-transparent md:p-0"
                 onClick={
                   sessionData ? () => void signOut() : () => void signIn()
                 }
