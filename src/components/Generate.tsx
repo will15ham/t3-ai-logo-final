@@ -107,6 +107,7 @@ const GenerateForm: React.FC = () => {
               onChange={handleInputChange}
               className="w-full rounded-md border-gray-300 p-2 text-black shadow-sm"
               placeholder="e.g. 'a happy dog'"
+              required
             />
           </div>
           <div className="mb-4">
@@ -116,7 +117,7 @@ const GenerateForm: React.FC = () => {
                 key={color.name}
                 className={`mb-2 mr-4 inline-flex items-center ${
                   color.color
-                } h-24 w-24 scale-110 cursor-pointer rounded-3xl ${
+                } h-12 w-12 scale-110 cursor-pointer justify-center rounded-3xl ${
                   formValues.colorInput === color.name
                     ? "ring-2 ring-white"
                     : "bg-opacity-50"
@@ -135,73 +136,58 @@ const GenerateForm: React.FC = () => {
             ))}
           </div>
           <div className="mb-4">
-            <p className="mb-2 block font-medium">Select a shape:</p>
-            {shapes.map((shape) => (
-              <label
-                key={shape}
-                className={`mb-2 mr-4 inline-flex h-24 w-24 scale-110 cursor-pointer items-center rounded-3xl bg-purple-500 ${
-                  formValues.shapeInput === shape
-                    ? "ring-2 ring-white"
-                    : "bg-opacity-50"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="shapeInput"
-                  value={shape}
-                  checked={formValues.shapeInput === shape}
-                  onChange={handleInputChange}
-                  className="hidden"
-                />
-                <span className="sr-only">{shape}</span>
-              </label>
-            ))}
+            <label htmlFor="shapeInput" className="font-large mb-2 block">
+              Select a shape:
+            </label>
+            <select
+              id="shapeInput"
+              name="shapeInput"
+              value={formValues.shapeInput}
+              onChange={handleInputChange}
+              className="block w-full rounded-3xl bg-slate-600 px-3 py-3 text-white"
+            >
+              {shapes.map((shape) => (
+                <option key={shape} value={shape}>
+                  {shape}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="mb-4">
-            <p className="mb-2 block font-medium">Select a style:</p>
-            {styles.map((style) => (
-              <label
-                key={style}
-                className={`mb-2 mr-4 inline-flex h-24 w-24 scale-110 cursor-pointer items-center rounded-3xl bg-purple-500 ${
-                  formValues.styleInput === style
-                    ? "ring-2 ring-white"
-                    : "bg-opacity-50"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="styleInput"
-                  value={style}
-                  checked={formValues.styleInput === style}
-                  onChange={handleInputChange}
-                  className="hidden"
-                />
-                <span className="sr-only">{style}</span>
-              </label>
-            ))}
+            <label htmlFor="styleInput" className="mb-2 block font-medium">
+              Select a style:
+            </label>
+            <select
+              id="styleInput"
+              name="styleInput"
+              value={formValues.styleInput}
+              onChange={handleInputChange}
+              className="block w-full rounded-3xl bg-slate-600 px-3 py-3 text-white"
+            >
+              {styles.map((style) => (
+                <option key={style} value={style}>
+                  {style}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="mb-4">
-            <p className="mb-2 block font-medium">Select a type:</p>
-            {types.map((type) => (
-              <label
-                key={type}
-                className={`mb-2 mr-4 inline-flex h-24 w-24 scale-110 cursor-pointer items-center rounded-3xl bg-purple-500 ${
-                  formValues.typeInput === type
-                    ? "ring-2 ring-white"
-                    : "bg-opacity-50"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="typeInput"
-                  value={type}
-                  checked={formValues.typeInput === type}
-                  onChange={handleInputChange}
-                  className="hidden"
-                />
-                <span className="sr-only">{type}</span>
-              </label>
-            ))}
+            <label htmlFor="typeInput" className="mb-2 block font-medium">
+              Select a type:
+            </label>
+            <select
+              id="typeInput"
+              name="typeInput"
+              value={formValues.typeInput}
+              onChange={handleInputChange}
+              className="block w-full rounded-3xl bg-slate-600 px-3 py-3 text-white"
+            >
+              {types.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
           </div>
           <button
             type="submit"
