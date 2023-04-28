@@ -44,17 +44,16 @@ const GenerateForm: React.FC = () => {
   const [formValues, setFormValues] = useState<FormValues>({
     textInput: "",
     colorInput: "",
-    shapeInput: "",
-    styleInput: "",
-    typeInput: "",
+    shapeInput: "Circular",
+    styleInput: "Minimalist",
+    typeInput: "Regular",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
+  const handleInputChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLSelectElement
+  > = (event) => {
+    const { name, value } = event.target;
+    setFormValues({ ...formValues, [name]: value });
   };
 
   interface input {
@@ -78,7 +77,7 @@ const GenerateForm: React.FC = () => {
       shape: formValues.shapeInput,
       color: formValues.colorInput,
     };
-    mutate.mutate(input);
+    // mutate.mutate(input);
   };
 
   return (
