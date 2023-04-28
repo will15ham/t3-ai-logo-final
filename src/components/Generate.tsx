@@ -197,7 +197,7 @@ const GenerateForm: React.FC = () => {
             }
           >
             {sessionData
-              ? sessionData.user.credits > 1
+              ? sessionData.user.credits < 1
                 ? `Generate!`
                 : "Not enough credits"
               : "Sign in to generate"}{" "}
