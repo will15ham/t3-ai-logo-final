@@ -7,6 +7,8 @@ import { uploadFileToS3 } from "~/functions/aws";
 interface ReturnTypes {
   success: boolean;
   message?: string;
+  imageUrl?: string;
+  remainingCredits?: number;
 }
 
 export const generateImages = createTRPCRouter({
@@ -34,13 +36,15 @@ export const generateImages = createTRPCRouter({
 
       // Should never happen since this is a protected route
       if (!getUserIdResult) {
-        return (returnValue.message = "User not found.");
+        returnValue.message = "User not found.";
+        return returnValue;
       }
 
       const { credits } = getUserIdResult;
 
       if (credits < 1) {
-        return (returnValue.message = "Not enough credits.");
+        returnValue.message = "Not enough credits.";
+        return returnValue;
       }
 
       try {
@@ -56,12 +60,14 @@ export const generateImages = createTRPCRouter({
         const b64ImageReponse = data.data[0]?.b64_json;
         // Upload image to S3
         if (!b64ImageReponse) {
-          return (returnValue.message = "Failed to Generate Image.");
+          returnValue.message = "Failed to Generate Image.";
+          return returnValue;
         }
         const { Location } = await uploadFileToS3(b64ImageReponse);
 
         if (!Location) {
-          return (returnValue.message = "Failed to Save Image.");
+          returnValue.message = "Failed to Save Image.";
+          return returnValue;
         }
 
         await ctx.prisma.user.update({
@@ -81,13 +87,15 @@ export const generateImages = createTRPCRouter({
           },
         });
 
-        return (
-          (returnValue.success = true),
-          (returnValue.message = "Image generated.")
-        );
-      } catch (error) {
-        console.log(error);
-        return (returnValue.message = "Something went wrong.");
+        returnValue.success = true;
+        returnValue.message = "Image generated.";
+        returnValue.imageUrl = Location;
+        returnValue.remainingCredits = credits - 1;
+
+        return returnValue;
+      } catch {
+        returnValue.message = "Something went wrong.";
+        return returnValue;
       }
     }),
 });

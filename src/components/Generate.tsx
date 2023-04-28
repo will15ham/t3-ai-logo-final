@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 import Loading from "./LoadingSpinner";
+import Image from "next/image";
 
 interface FormValues {
   textInput: string;
@@ -198,12 +199,28 @@ const GenerateForm: React.FC = () => {
           >
             {sessionData
               ? sessionData.user.credits >= 1
-                ? `Generate!`
-                : "Not enough credits"
-              : "Sign in to generate"}{" "}
-            {mutate.isLoading ? <Loading /> : ""}
+                ? "Generate!"
+                : "Not enough credits."
+              : "Sign in to generate."}{" "}
+            {mutate.isLoading && <Loading />}
           </button>
         </form>
+        {mutate.isSuccess && (
+          <div className="flex flex-col items-center">
+            <h2 className="mb-4 text-2xl font-bold">Your icon:</h2>
+            <Image
+              className="rounded-lg"
+              src={mutate.data?.imageUrl || ""}
+              alt=""
+              width={100}
+              height={100}
+            ></Image>
+            <p className="mt-2 text-center text-sm">
+              <span className="font-bold">Credits remaining:</span>{" "}
+              {mutate.data?.remainingCredits}
+            </p>
+          </div>
+        )}
       </section>
     </>
   );
