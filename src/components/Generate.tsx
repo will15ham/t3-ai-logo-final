@@ -77,7 +77,7 @@ const GenerateForm: React.FC = () => {
       shape: formValues.shapeInput,
       color: formValues.colorInput,
     };
-    // mutate.mutate(input);
+    mutate.mutate(input);
   };
 
   return (
